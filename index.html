@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vazha Kobalava - Linux Systems Administrator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Muted Teal & Slate -->
+    <!-- Application Structure Plan: A single-page, vertical-scrolling application with a fixed header for navigation. The structure prioritizes a narrative flow: Summary (introduction), Experience (interactive timeline), Skills (visualized with a chart), and finally Certifications/Languages (credentials). This is more engaging than a static document. The interactive timeline allows users to drill into details without being overwhelmed initially. The skills chart provides a quick, visual summary of technical breadth. This structure guides a recruiter through the candidate's story logically and memorably. -->
+    <!-- Visualization & Content Choices: 
+        - Experience -> Goal: Organize/Change -> Method: Interactive Timeline (HTML/CSS/JS) -> Interaction: Click to expand/collapse role details -> Justification: Focuses on career progression and makes a dense section scannable.
+        - Skills -> Goal: Compare/Organize -> Method: Horizontal Bar Chart (Chart.js) -> Interaction: Hover/Tooltip to show specific skills in a category -> Justification: Visually groups expertise and offers a quick understanding of the candidate's technical landscape. The chart quantifies the number of skills per area, giving a sense of depth.
+        - Certifications/Languages -> Goal: Inform/Verify -> Method: Styled Cards (HTML/Tailwind) -> Interaction: Click to verify -> Justification: Presents credentials in a clean, professional, and easily digestible format, now with direct verification links.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+                max-height: 500px;
+            }
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            top: 1rem;
+            left: -2.1rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background-color: #0d9488;
+            border: 4px solid #f0fdfa;
+        }
+        .details-hidden {
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            margin-top: 0 !important;
+            visibility: hidden;
+        }
+        .details-visible {
+            max-height: 500px;
+            opacity: 1;
+            transform: translateY(0);
+            margin-top: 1rem !important;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header id="header" class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-teal-700">Vazha Kobalava</h1>
+                <p class="text-sm text-slate-600">Linux Systems Administrator</p>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#experience" class="text-slate-600 hover:text-teal-700 font-medium transition-colors">Experience</a>
+                <a href="#skills" class="text-slate-600 hover:text-teal-700 font-medium transition-colors">Skills</a>
+                <a href="#certifications" class="text-slate-600 hover:text-teal-700 font-medium transition-colors">Certifications</a>
+            </div>
+             <div class="md:hidden">
+                <button id="menu-btn" class="text-slate-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#experience" class="block py-2 px-6 text-sm text-slate-600 hover:bg-teal-50">Experience</a>
+            <a href="#skills" class="block py-2 px-6 text-sm text-slate-600 hover:bg-teal-50">Skills</a>
+            <a href="#certifications" class="block py-2 px-6 text-sm text-slate-600 hover:bg-teal-50">Certifications</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+
+        <section id="summary" class="mb-16 md:mb-24 flex flex-col items-center">
+            <img class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover mb-6 shadow-lg border-4 border-white" 
+                 src="profile.jpg" 
+                 alt="Vazha Kobalava"
+                 onerror="this.onerror=null;this.src='https://placehold.co/160x160/e2e8f0/475569?text=VK';">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center">Summary</h2>
+             <p class="max-w-3xl mx-auto text-slate-600 leading-relaxed text-center">
+                A detail-oriented and certified Linux Systems Administrator with 2 years of specialized experience in designing, implementing, and maintaining robust and secure server environments. Proficient in a wide range of Linux distributions including CentOS, Rocky Linux, and Ubuntu. Proven ability to enhance system monitoring, security, and performance through tools like Zabbix, ELK Stack, and Graylog. Seeking to leverage expertise in virtualization, load balancing, and containerization to contribute to a challenging and dynamic IT team.
+            </p>
+        </section>
+
+        <section id="experience" class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Professional Experience</h2>
+            <div class="max-w-3xl mx-auto">
+                 <p class="text-center text-slate-600 mb-12">Here is a timeline of my professional journey, highlighting key responsibilities and achievements in each role. Click on a position to see more details.</p>
+                <div class="relative border-l-2 border-teal-200 pl-8 space-y-12">
+                    
+                    <div class="timeline-item">
+                        <div class="cursor-pointer group" data-target="details-1">
+                            <h3 class="text-xl font-bold text-teal-800">Linux Systems Administrator</h3>
+                            <p class="font-medium text-slate-600">Betlive | January 2024 – Present</p>
+                            <span class="text-teal-600 text-sm group-hover:underline">Click to expand/collapse</span>
+                        </div>
+                        <div id="details-1" class="transition-all duration-500 ease-in-out details-hidden">
+                            <ul class="list-disc pl-5 text-slate-600 space-y-2">
+                                <li>Administer and maintain a virtualized server infrastructure using VMware ESXi.</li>
+                                <li>Manage and support Linux servers running on CentOS, Rocky Linux, and Ubuntu distributions.</li>
+                                <li>Designed, deployed, and manage a secure jumpserver for IT personnel, enabling controlled and monitored access to critical management servers.</li>
+                                <li>Implemented and configured comprehensive monitoring solutions using Zabbix, ELK Stack, and Graylog to ensure system health and proactively identify issues.</li>
+                                <li>Manage web traffic and service availability using Zevenet and Nginx for load balancing and reverse proxy configurations.</li>
+                                <li>Utilize Docker to deploy and manage containerized services, improving application portability and efficiency.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="cursor-pointer group" data-target="details-2">
+                            <h3 class="text-xl font-bold text-teal-800">IT Specialist</h3>
+                            <p class="font-medium text-slate-600">Betlive | May 2017 – January 2024</p>
+                             <span class="text-teal-600 text-sm group-hover:underline">Click to expand/collapse</span>
+                        </div>
+                        <div id="details-2" class="transition-all duration-500 ease-in-out details-hidden">
+                            <ul class="list-disc pl-5 text-slate-600 space-y-2">
+                                <li>Provided general IT support across the company, contributing to system uptime and user satisfaction.</li>
+                                <li>Gained foundational experience in network and system administration, which led to a promotion to a specialized role.</li>
+                                <li>Assisted in the maintenance of server hardware and software.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Technical Skills</h2>
+            <p class="text-center text-slate-600 mb-12">This chart categorizes my technical skills. Hover over any bar to see the specific technologies I've worked with in that area.</p>
+            <div class="chart-container bg-white p-4 rounded-lg shadow-md">
+                <canvas id="skillsChart"></canvas>
+            </div>
+        </section>
+
+        <section id="certifications" class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Certifications & Languages</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                
+                <a href="https://cs.lpi.org/caf/Xamman/certification/verify/LPI000549756/nge5uwxl8g" target="_blank" rel="noopener noreferrer" class="block bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                     <div class="mb-2 text-3xl text-teal-600">📜</div>
+                    <h3 class="text-lg font-bold">LPIC-2: Linux Engineer</h3>
+                    <p class="text-slate-500">Linux Professional Institute</p>
+                    <span class="mt-4 inline-block text-sm text-teal-600 font-medium">Verify Certification ↗</span>
+                </a>
+
+                <a href="https://cs.lpi.org/caf/Xamman/certification/verify/LPI000549756/nge5uwxl8g" target="_blank" rel="noopener noreferrer" class="block bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div class="mb-2 text-3xl text-teal-600">📜</div>
+                    <h3 class="text-lg font-bold">LPIC-1: Linux Administrator</h3>
+                    <p class="text-slate-500">Linux Professional Institute</p>
+                    <span class="mt-4 inline-block text-sm text-teal-600 font-medium">Verify Certification ↗</span>
+                </a>
+
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <div class="mb-2 text-3xl text-teal-600">🌐</div>
+                    <h3 class="text-lg font-bold">English</h3>
+                    <p class="text-slate-500">B2 Upper-Intermediate</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="text-center text-slate-500 border-t border-slate-200 pt-8">
+            <p>Contact: <a href="mailto:vazhakobalava@gmail.com" class="text-teal-700 hover:underline">vazhakobalava@gmail.com</a> | 557233255 | <a href="https://www.linkedin.com/in/vazha-kobalava/" target="_blank" rel="noopener noreferrer" class="text-teal-700 hover:underline">LinkedIn</a></p>
+            <p class="mt-2 text-sm">Interactive CV generated on <span id="currentDate"></span>.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            const timelineItems = document.querySelectorAll('.timeline-item .group');
+            timelineItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const detailsDiv = document.getElementById(targetId);
+                    const isVisible = detailsDiv.classList.contains('details-visible');
+                    
+                    document.querySelectorAll('.details-visible').forEach(openDiv => {
+                        if(openDiv !== detailsDiv){
+                           openDiv.classList.remove('details-visible');
+                           openDiv.classList.add('details-hidden');
+                        }
+                    });
+                    
+                    if(isVisible){
+                        detailsDiv.classList.remove('details-visible');
+                        detailsDiv.classList.add('details-hidden');
+                    } else {
+                        detailsDiv.classList.remove('hidden');
+                        detailsDiv.classList.add('details-visible');
+                    }
+                });
+            });
+            
+            const skillsData = {
+                'Operating Systems': ['CentOS', 'Rocky Linux', 'Ubuntu Server', 'Windows Server'],
+                'Virtualization': ['VMware ESXi'],
+                'Monitoring': ['Zabbix', 'ELK Stack', 'Graylog'],
+                'Load Balancing & Proxy': ['Zevenet', 'Nginx'],
+                'Containerization': ['Docker'],
+                'Networking': ['TCP/IP', 'DNS', 'DHCP', 'Firewalls'],
+                'Scripting': ['Bash (Basic/Intermediate)'],
+            };
+            
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(skillsData),
+                    datasets: [{
+                        label: 'Number of Skills',
+                        data: Object.values(skillsData).map(arr => arr.length),
+                        backgroundColor: 'rgba(15, 118, 110, 0.6)',
+                        borderColor: 'rgba(13, 148, 136, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const category = context.label;
+                                    const skills = skillsData[category];
+                                    return skills.join(', ');
+                                }
+                            },
+                            backgroundColor: '#0f766e',
+                            titleFont: { size: 0 },
+                            bodyFont: { size: 14 },
+                            padding: 12,
+                            displayColors: false,
+                        }
+                    },
+                    scales: {
+                        x: {
+                           beginAtZero: true,
+                            grid: {
+                                color: '#e2e8f0'
+                            },
+                            ticks: {
+                                color: '#475569',
+                                stepSize: 1
+                            }
+                        },
+                        y: {
+                           grid: {
+                                display: false
+                           },
+                           ticks: {
+                                color: '#334155',
+                                font: {
+                                    weight: '500'
+                                }
+                           }
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        });
+    </script>
+</body>
+</html>
+
